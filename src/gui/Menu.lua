@@ -20,12 +20,14 @@ function Menu:init(def)
         x = def.x,
         y = def.y,
         width = def.width,
-        height = def.height
+        height = def.height,
+        showCursor = def.showCursor
     }
 end
 
 function Menu:update(dt)
     self.selection:update(dt)
+    self.isClosed = self.selection.isClosed
 end
 
 function Menu:render()

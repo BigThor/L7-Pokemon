@@ -210,13 +210,25 @@ function TakeTurnState:victory()
                         
                         gSounds['levelup']:play()
 
+                        local previousStats = {
+                            HP = self.playerPokemon.HP,
+                            attack = self.playerPokemon.attack,
+                            defense = self.playerPokemon.defense,
+                            speed = self.playerPokemon.speed
+                        }
+
+                        local statsIncrease = {}
+
                         -- set our exp to whatever the overlap is
                         self.playerPokemon.currentExp = self.playerPokemon.currentExp - self.playerPokemon.expToLevel
-                        self.playerPokemon:levelUp()
+                        statsIncrease.HP, statsIncrease.attack, statsIncrease.defense, statsIncrease.speed = self.playerPokemon:levelUp()
 
                         gStateStack:push(BattleMessageState('Congratulations! Level Up!',
                         function()
-                            self:fadeOutWhite()
+                            gStateStack:push(LevelupMenuState(previousStats, statsIncrease,
+                            function()
+                                self:fadeOutWhite()
+                            end))
                         end))
                     else
                         self:fadeOutWhite()
